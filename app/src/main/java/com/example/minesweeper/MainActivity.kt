@@ -13,20 +13,27 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.minesweeper.data.Cell
 import com.example.minesweeper.ui.theme.MinesweeperTheme
 import com.example.minesweeper.utils.LogComposition
 import com.example.minesweeper.utils.TAG
+import com.example.minesweeper.utils.generateBoard
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,11 +55,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Board() {
     val cells = remember {
-        Array(8) {
-            Array(8) {
-                Cell()
-            }
-        }
+        generateBoard(8, 10)
     }
     GridWithColors(data = cells)
 }
@@ -81,9 +84,11 @@ fun CellScope(rowIndex: Int, colIndex: Int, data: Array<Array<Cell>>) {
     )
     CellElement(cell = data[rowIndex][colIndex], onColorChange = {
         data[rowIndex][colIndex].color = it
+        data[rowIndex][colIndex].isRevealed = true
         for ((dx, dy) in neighboursDirection) {
             if (rowIndex+dx>=0 && rowIndex+dx<data.size && colIndex+dy>=0 && colIndex+dy<data.size) {
                 data[rowIndex+dx][colIndex+dy].color = it
+                data[rowIndex+dx][colIndex+dy].isRevealed = true
             }
         }
     })
@@ -97,13 +102,31 @@ fun CellElement(cell: Cell, onColorChange: (Color) -> Unit) {
         modifier = Modifier
             .size(40.dp)
             .padding(4.dp),
-        color = cell.color
+        shape = RoundedCornerShape(8.dp),
+        color = if (cell.isRevealed)
+            if (cell.isMined) Color.Red else Color.Blue
+        else Color.Cyan
     ) {
         Box(modifier = Modifier
             .fillMaxSize()
             .clickable {
-                onColorChange(Color.Blue)
-            })
+                if (!cell.isRevealed)
+                    onColorChange(Color.Blue)
+            }
+        ) {
+            if (cell.isRevealed) {
+                Text(
+                    modifier = Modifier.fillMaxSize(),
+                    text = "${cell.minesAround}",
+                    textAlign = TextAlign.Center,
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 24.sp,
+                        color = Color.White
+                    )
+                )
+            }
+        }
     }
 }
 
