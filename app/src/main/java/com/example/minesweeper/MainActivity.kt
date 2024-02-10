@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.MaterialTheme
@@ -66,7 +67,7 @@ fun GridWithColors(data: Array<Array<MutableState<Color>>>) {
             Row(modifier = Modifier.fillMaxWidth()) {
                 LogComposition(tag = TAG, msg = "Row")
                 for (colIndex in data[rowIndex].indices) {
-                    Cell(rowIndex, colIndex, data)
+                    CellScope(rowIndex = rowIndex, colIndex = colIndex, data = data)
                 }
             }
         }
@@ -74,19 +75,27 @@ fun GridWithColors(data: Array<Array<MutableState<Color>>>) {
 }
 
 @Composable
-fun Cell(rowIndex: Int, colIndex: Int, data: Array<Array<MutableState<Color>>>) {
+fun CellScope(rowIndex: Int, colIndex: Int, data: Array<Array<MutableState<Color>>>) {
+    Cell(color = data[rowIndex][colIndex].value, onColorChange = {
+        data[rowIndex][colIndex].value = it
+    })
+}
+
+
+@Composable
+fun Cell(color: Color, onColorChange: (Color) -> Unit) {
     LogComposition(tag = TAG, msg = "Cell")
     Surface(
         modifier = Modifier
             .size(40.dp)
             .padding(4.dp),
-        color = data[rowIndex][colIndex].value
+        color = color
     ) {
         LogComposition(tag = TAG, msg = "Surface")
         Box(modifier = Modifier
             .fillMaxSize()
             .clickable {
-                data[rowIndex][colIndex].value = Color.Blue
+                onColorChange(Color.Blue)
             })
     }
 }
