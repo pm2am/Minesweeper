@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.minesweeper.data.Cell
 import com.example.minesweeper.ui.theme.MinesweeperTheme
 import com.example.minesweeper.utils.LogComposition
 import com.example.minesweeper.utils.TAG
@@ -46,18 +47,18 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Board() {
-    val colors = remember {
+    val cells = remember {
         Array(8) {
             Array(8) {
-                mutableStateOf(Color.Red)
+                Cell()
             }
         }
     }
-    GridWithColors(data = colors)
+    GridWithColors(data = cells)
 }
 
 @Composable
-fun GridWithColors(data: Array<Array<MutableState<Color>>>) {
+fun GridWithColors(data: Array<Array<Cell>>) {
     LazyVerticalGrid(columns = GridCells.Fixed(1)) {
         items(data.size) { rowIndex ->
             Row(modifier = Modifier.fillMaxWidth()) {
@@ -71,18 +72,18 @@ fun GridWithColors(data: Array<Array<MutableState<Color>>>) {
 }
 
 @Composable
-fun CellScope(rowIndex: Int, colIndex: Int, data: Array<Array<MutableState<Color>>>) {
+fun CellScope(rowIndex: Int, colIndex: Int, data: Array<Array<Cell>>) {
     val neighboursDirection = arrayOf(
         arrayOf(-1,0),
         arrayOf(1,0),
         arrayOf(0,-1),
         arrayOf(0,1)
     )
-    Cell(color = data[rowIndex][colIndex].value, onColorChange = {
-        data[rowIndex][colIndex].value = it
+    CellElement(cell = data[rowIndex][colIndex], onColorChange = {
+        data[rowIndex][colIndex].color = it
         for ((dx, dy) in neighboursDirection) {
             if (rowIndex+dx>=0 && rowIndex+dx<data.size && colIndex+dy>=0 && colIndex+dy<data.size) {
-                data[rowIndex+dx][colIndex+dy].value = it
+                data[rowIndex+dx][colIndex+dy].color = it
             }
         }
     })
@@ -90,18 +91,18 @@ fun CellScope(rowIndex: Int, colIndex: Int, data: Array<Array<MutableState<Color
 
 
 @Composable
-fun Cell(color: Color, onColorChange: (Color) -> Unit) {
+fun CellElement(cell: Cell, onColorChange: (Color) -> Unit) {
     LogComposition(tag = TAG, msg = "Cell")
     Surface(
         modifier = Modifier
             .size(40.dp)
             .padding(4.dp),
-        color = color
+        color = cell.color
     ) {
         Box(modifier = Modifier
             .fillMaxSize()
             .clickable {
-                onColorChange(Color.Red)
+                onColorChange(Color.Blue)
             })
     }
 }
