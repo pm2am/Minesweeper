@@ -66,9 +66,7 @@ fun GridWithColors(data: Array<Array<MutableState<Color>>>) {
             Row(modifier = Modifier.fillMaxWidth()) {
                 LogComposition(tag = TAG, msg = "Row")
                 for (colIndex in data[rowIndex].indices) {
-                    Cell(color = data[rowIndex][colIndex].value, onColorChange = {
-                        data[rowIndex][colIndex].value = it
-                    })
+                    Cell(rowIndex, colIndex, data)
                 }
             }
         }
@@ -76,19 +74,19 @@ fun GridWithColors(data: Array<Array<MutableState<Color>>>) {
 }
 
 @Composable
-fun Cell(color: Color, onColorChange: (Color) -> Unit) {
+fun Cell(rowIndex: Int, colIndex: Int, data: Array<Array<MutableState<Color>>>) {
     LogComposition(tag = TAG, msg = "Cell")
     Surface(
         modifier = Modifier
             .size(40.dp)
             .padding(4.dp),
-        color = color
+        color = data[rowIndex][colIndex].value
     ) {
         LogComposition(tag = TAG, msg = "Surface")
         Box(modifier = Modifier
             .fillMaxSize()
             .clickable {
-                onColorChange(Color.Blue)
+                data[rowIndex][colIndex].value = Color.Blue
             })
     }
 }
