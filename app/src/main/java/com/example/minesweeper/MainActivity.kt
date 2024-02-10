@@ -1,6 +1,7 @@
 package com.example.minesweeper
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
@@ -82,12 +83,10 @@ fun CellScope(rowIndex: Int, colIndex: Int, data: Array<Array<Cell>>) {
         arrayOf(0,-1),
         arrayOf(0,1)
     )
-    CellElement(cell = data[rowIndex][colIndex], onColorChange = {
-        data[rowIndex][colIndex].color = it
+    CellElement(cell = data[rowIndex][colIndex], onCellClicked = {
         data[rowIndex][colIndex].isRevealed = true
         for ((dx, dy) in neighboursDirection) {
             if (rowIndex+dx>=0 && rowIndex+dx<data.size && colIndex+dy>=0 && colIndex+dy<data.size) {
-                data[rowIndex+dx][colIndex+dy].color = it
                 data[rowIndex+dx][colIndex+dy].isRevealed = true
             }
         }
@@ -96,7 +95,7 @@ fun CellScope(rowIndex: Int, colIndex: Int, data: Array<Array<Cell>>) {
 
 
 @Composable
-fun CellElement(cell: Cell, onColorChange: (Color) -> Unit) {
+fun CellElement(cell: Cell, onCellClicked: () -> Unit) {
     LogComposition(tag = TAG, msg = "Cell")
     Surface(
         modifier = Modifier
@@ -111,10 +110,10 @@ fun CellElement(cell: Cell, onColorChange: (Color) -> Unit) {
             .fillMaxSize()
             .clickable {
                 if (!cell.isRevealed)
-                    onColorChange(Color.Blue)
+                    onCellClicked()
             }
         ) {
-            if (cell.isRevealed) {
+            if (cell.isRevealed && !cell.isMined) {
                 Text(
                     modifier = Modifier.fillMaxSize(),
                     text = "${cell.minesAround}",
