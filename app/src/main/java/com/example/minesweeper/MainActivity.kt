@@ -1,7 +1,6 @@
 package com.example.minesweeper
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,8 +17,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.minesweeper.data.Cell
 import com.example.minesweeper.ui.theme.MinesweeperTheme
+import com.example.minesweeper.utils.CellBFS
 import com.example.minesweeper.utils.LogComposition
 import com.example.minesweeper.utils.TAG
 import com.example.minesweeper.utils.generateBoard
@@ -77,22 +74,14 @@ fun GridWithColors(data: Array<Array<Cell>>) {
 
 @Composable
 fun CellScope(rowIndex: Int, colIndex: Int, data: Array<Array<Cell>>) {
-    val neighboursDirection = arrayOf(
-        arrayOf(-1,0),
-        arrayOf(1,0),
-        arrayOf(0,-1),
-        arrayOf(0,1)
-    )
     CellElement(cell = data[rowIndex][colIndex], onCellClicked = {
-        data[rowIndex][colIndex].isRevealed = true
-        for ((dx, dy) in neighboursDirection) {
-            if (rowIndex+dx>=0 && rowIndex+dx<data.size && colIndex+dy>=0 && colIndex+dy<data.size) {
-                data[rowIndex+dx][colIndex+dy].isRevealed = true
-            }
+        if (data[rowIndex][colIndex].minesAround==0) {
+            CellBFS(rowIndex, colIndex, data = data)
+        } else {
+            data[rowIndex][colIndex].isRevealed = true
         }
     })
 }
-
 
 @Composable
 fun CellElement(cell: Cell, onCellClicked: () -> Unit) {
@@ -113,7 +102,7 @@ fun CellElement(cell: Cell, onCellClicked: () -> Unit) {
                     onCellClicked()
             }
         ) {
-            if (cell.isRevealed && !cell.isMined) {
+            if (cell.isRevealed && !cell.isMined && cell.minesAround!=0) {
                 Text(
                     modifier = Modifier.fillMaxSize(),
                     text = "${cell.minesAround}",
