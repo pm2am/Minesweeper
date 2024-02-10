@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
+                    Board()
                 }
             }
         }
@@ -44,26 +44,24 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Board() {
     val colors = remember {
-        mutableStateOf(
+        Array(8) {
             Array(8) {
-                Array(8) {
-                    Color.Red
-                }
+                mutableStateOf(Color.Red)
             }
-        )
+        }
     }
 
     GridWithColors(data = colors)
 }
 
 @Composable
-fun GridWithColors(data: MutableState<Array<Array<Color>>>) {
+fun GridWithColors(data: Array<Array<MutableState<Color>>>) {
     LazyVerticalGrid(columns = GridCells.Fixed(1)) {
-        items(data.value.size) { rowIndex ->
+        items(data.size) { rowIndex ->
             Row(modifier = Modifier.fillMaxWidth()) {
-                for (colIndex in data.value[rowIndex].indices) {
-                    Cell(color = data.value[rowIndex][colIndex], onColorChange = {
-                        data.value[rowIndex][colIndex] = it
+                for (colIndex in data[rowIndex].indices) {
+                    Cell(color = data[rowIndex][colIndex].value, onColorChange = {
+                        data[rowIndex][colIndex].value = it
                     })
                 }
             }
