@@ -9,3 +9,7 @@ Functional Requirements:
 Nonfunctional Requirements:
   - Performance: Game should be responsive and run smoothly. Meaning fast loading time, quick response from the player's action
   - Reliability: The game should be stable and free from crashes or unexpected errors. It should handle unexpected inputs gracefully and recover from errors without losing game progress.
+
+Important Articles:
+  - https://proandroiddev.com/debugging-the-recomposition-in-jetpack-compose-16e92cbc9c6
+  - "Donot hole skipping" in compose: https://www.jetpackcompose.app/articles/donut-hole-skipping-in-jetpack-compose
