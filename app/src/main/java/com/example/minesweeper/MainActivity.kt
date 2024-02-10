@@ -53,17 +53,13 @@ fun Board() {
             }
         }
     }
-
-    LogComposition(tag = TAG, msg = "Board")
     GridWithColors(data = colors)
 }
 
 @Composable
 fun GridWithColors(data: Array<Array<MutableState<Color>>>) {
-    LogComposition(tag = TAG, msg = "GridWithColors")
     LazyVerticalGrid(columns = GridCells.Fixed(1)) {
         items(data.size) { rowIndex ->
-            LogComposition(tag = TAG, msg = "LazyVerticalGrid")
             Row(modifier = Modifier.fillMaxWidth()) {
                 LogComposition(tag = TAG, msg = "Row")
                 for (colIndex in data[rowIndex].indices) {
@@ -102,11 +98,10 @@ fun Cell(color: Color, onColorChange: (Color) -> Unit) {
             .padding(4.dp),
         color = color
     ) {
-        LogComposition(tag = TAG, msg = "Surface")
         Box(modifier = Modifier
             .fillMaxSize()
             .clickable {
-                onColorChange(Color.Blue)
+                onColorChange(Color.Red)
             })
     }
 }
