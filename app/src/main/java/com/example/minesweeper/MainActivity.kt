@@ -23,6 +23,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.minesweeper.ui.theme.MinesweeperTheme
+import com.example.minesweeper.utils.LogComposition
+import com.example.minesweeper.utils.TAG
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,14 +53,18 @@ fun Board() {
         }
     }
 
+    LogComposition(tag = TAG, msg = "Board")
     GridWithColors(data = colors)
 }
 
 @Composable
 fun GridWithColors(data: Array<Array<MutableState<Color>>>) {
+    LogComposition(tag = TAG, msg = "GridWithColors")
     LazyVerticalGrid(columns = GridCells.Fixed(1)) {
         items(data.size) { rowIndex ->
+            LogComposition(tag = TAG, msg = "LazyVerticalGrid")
             Row(modifier = Modifier.fillMaxWidth()) {
+                LogComposition(tag = TAG, msg = "Row")
                 for (colIndex in data[rowIndex].indices) {
                     Cell(color = data[rowIndex][colIndex].value, onColorChange = {
                         data[rowIndex][colIndex].value = it
@@ -71,12 +77,14 @@ fun GridWithColors(data: Array<Array<MutableState<Color>>>) {
 
 @Composable
 fun Cell(color: Color, onColorChange: (Color) -> Unit) {
+    LogComposition(tag = TAG, msg = "Cell")
     Surface(
         modifier = Modifier
             .size(40.dp)
             .padding(4.dp),
         color = color
     ) {
+        LogComposition(tag = TAG, msg = "Surface")
         Box(modifier = Modifier
             .fillMaxSize()
             .clickable {
