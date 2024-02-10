@@ -76,8 +76,19 @@ fun GridWithColors(data: Array<Array<MutableState<Color>>>) {
 
 @Composable
 fun CellScope(rowIndex: Int, colIndex: Int, data: Array<Array<MutableState<Color>>>) {
+    val neighboursDirection = arrayOf(
+        arrayOf(-1,0),
+        arrayOf(1,0),
+        arrayOf(0,-1),
+        arrayOf(0,1)
+    )
     Cell(color = data[rowIndex][colIndex].value, onColorChange = {
         data[rowIndex][colIndex].value = it
+        for ((dx, dy) in neighboursDirection) {
+            if (rowIndex+dx>=0 && rowIndex+dx<data.size && colIndex+dy>=0 && colIndex+dy<data.size) {
+                data[rowIndex+dx][colIndex+dy].value = it
+            }
+        }
     })
 }
 
