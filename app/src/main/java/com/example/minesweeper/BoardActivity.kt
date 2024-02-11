@@ -58,16 +58,12 @@ fun Board() {
     val cells = remember {
         mutableStateOf(generateBoard(8, 10))
     }
-    Surface(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Column {
-            GridWithColors(data = cells.value)
-            ElevatedButton(onClick = {
-                cells.value = generateBoard(8, 10)
-            }) {
-                Text(text = "RESET")
-            }
+    Column {
+        GridWithColors(data = cells.value)
+        ElevatedButton(onClick = {
+            cells.value = generateBoard(8, 10)
+        }) {
+            Text(text = "RESET")
         }
     }
 }
