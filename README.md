@@ -6,7 +6,6 @@ Functional Requirements:
   - Lose condition: Game ends if the player click on a cell containing a mine
   - Timer: Timer to track the time taken by the player
   - Restart Option: Players should be able to restart the game at any time, either from the beginning or from the current state.
-  - Players should be able to restart the game at any time, either from the beginning or from the current state.
   - Save/Load Game: The game might allow players to save their progress and resume it later.
 
 Nonfunctional Requirements:
