@@ -3,6 +3,7 @@ package com.example.minesweeper
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableIntState
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -58,24 +62,47 @@ fun Board() {
     val cells = remember {
         mutableStateOf(generateBoard(8, 10))
     }
+    val revealedCount = remember {
+        mutableIntStateOf(8*8)
+    }
     Column {
-        GridWithColors(data = cells.value)
-        ElevatedButton(onClick = {
-            cells.value = generateBoard(8, 10)
-        }) {
-            Text(text = "RESET")
-        }
+        GridWithColors(data = cells.value, revealedCount = revealedCount)
+        ButtonLayout(cells = cells, revealedCount = revealedCount)
     }
 }
 
 @Composable
-fun GridWithColors(data: Array<Array<Cell>>) {
+fun ButtonLayout(cells: MutableState<Array<Array<Cell>>>, revealedCount: MutableIntState) {
+    ElevatedButton(onClick = {
+        cells.value = generateBoard(8, 10)
+        revealedCount.intValue = 8*8
+    }) {
+        Text(text = "RESET")
+    }
+    Text(
+        text = when (revealedCount.intValue) {
+            -1 -> "LOSE"
+            10 -> "WIN"
+            else -> "Count: ${revealedCount.intValue}"
+        },
+        Modifier.background(
+            color = when (revealedCount.intValue) {
+                -1 -> Color.Red
+                10 -> Color.Green
+                else -> Color.Cyan
+            }
+        ).padding(8.dp)
+    )
+}
+
+@Composable
+fun GridWithColors(data: Array<Array<Cell>>, revealedCount: MutableIntState) {
     LazyVerticalGrid(columns = GridCells.Fixed(1)) {
         items(data.size) { rowIndex ->
             Row(modifier = Modifier.fillMaxWidth()) {
                 LogComposition(tag = TAG, msg = "Row")
                 for (colIndex in data[rowIndex].indices) {
-                    CellScope(rowIndex = rowIndex, colIndex = colIndex, data = data)
+                    CellScope(rowIndex = rowIndex, colIndex = colIndex, data = data, revealedCount)
                 }
             }
         }
@@ -83,12 +110,25 @@ fun GridWithColors(data: Array<Array<Cell>>) {
 }
 
 @Composable
-fun CellScope(rowIndex: Int, colIndex: Int, data: Array<Array<Cell>>) {
-    CellElement(cell = data[rowIndex][colIndex], onCellClicked = {
-        if (data[rowIndex][colIndex].minesAround==0) {
-            CellBFS(rowIndex, colIndex, data = data)
+fun CellScope(
+    rowIndex: Int,
+    colIndex: Int,
+    data: Array<Array<Cell>>,
+    revealedCount: MutableIntState
+) {
+    val curCell = data[rowIndex][colIndex]
+    CellElement(cell = curCell, onCellClicked = {
+        if (curCell.isRevealed || revealedCount.intValue==-1 || revealedCount.intValue==10) {
+            return@CellElement
+        }
+        if (data[rowIndex][colIndex].isMined) {
+            revealedCount.intValue = -1
+            data[rowIndex][colIndex].isRevealed = true
+        } else if (data[rowIndex][colIndex].minesAround==0) {
+            revealedCount.intValue -= CellBFS(rowIndex, colIndex, data = data)
         } else {
             data[rowIndex][colIndex].isRevealed = true
+            revealedCount.intValue--
         }
     })
 }
@@ -108,8 +148,7 @@ fun CellElement(cell: Cell, onCellClicked: () -> Unit) {
         Box(modifier = Modifier
             .fillMaxSize()
             .clickable {
-                if (!cell.isRevealed)
-                    onCellClicked()
+                onCellClicked()
             }
         ) {
             if (cell.isRevealed && !cell.isMined && cell.minesAround!=0) {
