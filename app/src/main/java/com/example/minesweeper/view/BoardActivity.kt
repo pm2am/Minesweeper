@@ -1,4 +1,4 @@
-package com.example.minesweeper
+package com.example.minesweeper.view
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -22,24 +22,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableIntState
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.minesweeper.data.Cell
 import com.example.minesweeper.ui.theme.MinesweeperTheme
 import com.example.minesweeper.utils.CellBFS
 import com.example.minesweeper.utils.LogComposition
 import com.example.minesweeper.utils.TAG
-import com.example.minesweeper.utils.generateBoard
+import com.example.minesweeper.viewmodel.BoardViewModel
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 
@@ -48,12 +46,13 @@ class BoardActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MinesweeperTheme {
+                val viewModel: BoardViewModel = viewModel()
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Board()
+                    Board(viewModel)
                 }
             }
         }
@@ -61,22 +60,20 @@ class BoardActivity : ComponentActivity() {
 }
 
 @Composable
-fun Board() {
-    val cells = remember {
-        mutableStateOf(generateBoard(8, 10))
-    }
-    val revealedCount = remember {
-        mutableIntStateOf(8*8)
-    }
+fun Board(viewModel: BoardViewModel) {
+    val cells = viewModel.cells
+    val revealedCount = viewModel.revealedCount
+    LogComposition(tag = TAG, msg = "Board")
     Column {
-        GridWithColors(data = cells.value, revealedCount = revealedCount)
-        InfoLayout(cells = cells, revealedCount = revealedCount)
+        LogComposition(tag = TAG, msg = "Column")
+        GridWithColors(data = cells, revealedCount = revealedCount)
+        InfoLayout(viewModel = viewModel, revealedCount = revealedCount)
     }
 }
 
 @Composable
 fun InfoLayout(
-    cells: MutableState<Array<Array<Cell>>>,
+    viewModel: BoardViewModel,
     revealedCount: MutableIntState
 ) {
     val timer = remember {
@@ -95,7 +92,7 @@ fun InfoLayout(
         text = "${timer.intValue}"
     )
     ElevatedButton(onClick = {
-        cells.value = generateBoard(8, 10)
+        viewModel.updateBoard()
         revealedCount.intValue = 8*8
         timer.intValue = 0
         timerKey.intValue++
@@ -189,13 +186,5 @@ fun CellElement(cell: Cell, onCellClicked: () -> Unit) {
                 )
             }
         }
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun BoardPreview() {
-    MinesweeperTheme {
-        Board()
     }
 }
