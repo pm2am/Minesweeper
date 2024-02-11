@@ -36,7 +36,7 @@ import com.example.minesweeper.utils.LogComposition
 import com.example.minesweeper.utils.TAG
 import com.example.minesweeper.utils.generateBoard
 
-class MainActivity : ComponentActivity() {
+class BoardActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
