@@ -20,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
@@ -39,6 +40,8 @@ import com.example.minesweeper.utils.CellBFS
 import com.example.minesweeper.utils.LogComposition
 import com.example.minesweeper.utils.TAG
 import com.example.minesweeper.utils.generateBoard
+import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.seconds
 
 class BoardActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,15 +70,35 @@ fun Board() {
     }
     Column {
         GridWithColors(data = cells.value, revealedCount = revealedCount)
-        ButtonLayout(cells = cells, revealedCount = revealedCount)
+        InfoLayout(cells = cells, revealedCount = revealedCount)
     }
 }
 
 @Composable
-fun ButtonLayout(cells: MutableState<Array<Array<Cell>>>, revealedCount: MutableIntState) {
+fun InfoLayout(
+    cells: MutableState<Array<Array<Cell>>>,
+    revealedCount: MutableIntState
+) {
+    val timer = remember {
+        mutableIntStateOf(0)
+    }
+    val timerKey = remember {
+        mutableIntStateOf(0)
+    }
+    LaunchedEffect(key1 = timerKey.intValue) {
+        while (revealedCount.intValue!=-1 && revealedCount.intValue!=10) {
+            timer.intValue++
+            delay(1.seconds)
+        }
+    }
+    Text(
+        text = "${timer.intValue}"
+    )
     ElevatedButton(onClick = {
         cells.value = generateBoard(8, 10)
         revealedCount.intValue = 8*8
+        timer.intValue = 0
+        timerKey.intValue++
     }) {
         Text(text = "RESET")
     }
@@ -85,13 +108,15 @@ fun ButtonLayout(cells: MutableState<Array<Array<Cell>>>, revealedCount: Mutable
             10 -> "WIN"
             else -> "Count: ${revealedCount.intValue}"
         },
-        Modifier.background(
-            color = when (revealedCount.intValue) {
-                -1 -> Color.Red
-                10 -> Color.Green
-                else -> Color.Cyan
-            }
-        ).padding(8.dp)
+        Modifier
+            .background(
+                color = when (revealedCount.intValue) {
+                    -1 -> Color.Red
+                    10 -> Color.Green
+                    else -> Color.Cyan
+                }
+            )
+            .padding(8.dp)
     )
 }
 
