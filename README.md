@@ -5,6 +5,9 @@ Functional Requirements:
   - Win condition: Players win the game when all non mine cells are revealed
   - Lose condition: Game ends if the player click on a cell containing a mine
   - Timer: Timer to track the time taken by the player
+  - Restart Option: Players should be able to restart the game at any time, either from the beginning or from the current state.
+  - Players should be able to restart the game at any time, either from the beginning or from the current state.
+  - Save/Load Game: The game might allow players to save their progress and resume it later.
 
 Nonfunctional Requirements:
   - Performance: Game should be responsive and run smoothly. Meaning fast loading time, quick response from the player's action
@@ -13,3 +16,4 @@ Nonfunctional Requirements:
 Important Articles:
   - https://proandroiddev.com/debugging-the-recomposition-in-jetpack-compose-16e92cbc9c6
   - "Donot hole skipping" in compose: https://www.jetpackcompose.app/articles/donut-hole-skipping-in-jetpack-compose
+  - https://developer.android.com/jetpack/compose/side-effects
