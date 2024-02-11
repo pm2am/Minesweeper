@@ -22,8 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableIntState
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -76,26 +74,22 @@ fun InfoLayout(
     viewModel: BoardViewModel,
     revealedCount: MutableIntState
 ) {
-    val timer = remember {
-        mutableIntStateOf(0)
-    }
-    val timerKey = remember {
-        mutableIntStateOf(0)
-    }
+    val timer = viewModel.timer
+    val timerKey = viewModel.timerKey
+
     LaunchedEffect(key1 = timerKey.intValue) {
         while (revealedCount.intValue!=-1 && revealedCount.intValue!=10) {
             timer.intValue++
             delay(1.seconds)
         }
     }
+
     Text(
         text = "${timer.intValue}"
     )
     ElevatedButton(onClick = {
         viewModel.updateBoard()
-        revealedCount.intValue = 8*8
-        timer.intValue = 0
-        timerKey.intValue++
+
     }) {
         Text(text = "RESET")
     }

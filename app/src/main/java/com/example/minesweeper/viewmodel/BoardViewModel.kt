@@ -12,8 +12,18 @@ class BoardViewModel : ViewModel() {
         private set
 
     var revealedCount = mutableIntStateOf(8*8)
+        private set
+
+    var timer = mutableIntStateOf(0)
+        private set
+
+    var timerKey = mutableIntStateOf(0)
+        private set
 
     fun updateBoard() {
         cells = generateBoard(8, 10)
+        revealedCount.intValue = 8*8
+        timer.intValue = 0
+        timerKey.intValue++
     }
 }
