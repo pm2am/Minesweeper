@@ -97,7 +97,7 @@ fun InfoLayout(
             .background(
                 color = when (viewModel.revealedCount.intValue) {
                     -1 -> Color.Red
-                    10 -> Color.Green
+                    10 -> Color.Magenta
                     else -> Color.Cyan
                 }
             )

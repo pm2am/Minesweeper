@@ -10,10 +10,12 @@ import com.example.minesweeper.utils.CellBFS
 import com.example.minesweeper.utils.generateBoard
 
 class BoardViewModel : ViewModel() {
-    var cells : List<List<Cell>> by mutableStateOf(generateBoard(8, 10))
+    private val size = 8
+    private val minesCount = 10
+    var cells : List<List<Cell>> by mutableStateOf(generateBoard(size, minesCount))
         private set
 
-    var revealedCount = mutableIntStateOf(8*8)
+    var revealedCount = mutableIntStateOf(size*size)
         private set
 
     var timer = mutableIntStateOf(0)
@@ -23,8 +25,8 @@ class BoardViewModel : ViewModel() {
         private set
 
     fun updateBoard() {
-        cells = generateBoard(8, 10)
-        revealedCount.intValue = 8*8
+        cells = generateBoard(size = size, minesCount = minesCount)
+        revealedCount.intValue = size * size
         timer.intValue = 0
         timerKey.intValue++
     }
