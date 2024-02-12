@@ -4,7 +4,7 @@ import com.example.minesweeper.data.Cell
 import java.util.LinkedList
 import java.util.Queue
 
-fun CellBFS(row: Int, col: Int, data: Array<Array<Cell>>) : Int {
+fun CellBFS(row: Int, col: Int, data: List<List<Cell>>) : Int {
     val dx = arrayOf(-1,1,0,0,-1,-1,1,1)
     val dy = arrayOf(0,0,-1,1,1,-1,1,-1)
     val q: Queue<Array<Int>> = LinkedList()

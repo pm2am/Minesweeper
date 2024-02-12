@@ -3,9 +3,9 @@ package com.example.minesweeper.utils
 import com.example.minesweeper.data.Cell
 import kotlin.random.Random
 
-fun generateBoard(size: Int, minesCount: Int) : Array<Array<Cell>> {
-    val board = Array(size) {
-        Array(size) {
+fun generateBoard(size: Int, minesCount: Int) : List<List<Cell>> {
+    val board = List(size) {
+        List(size) {
             Cell()
         }
     }
@@ -21,7 +21,7 @@ fun generateBoard(size: Int, minesCount: Int) : Array<Array<Cell>> {
     return board
 }
 
-private fun updateCellAround(x: Int, y: Int, board: Array<Array<Cell>>) {
+private fun updateCellAround(x: Int, y: Int, board: List<List<Cell>>) {
     board[x][y].isMined = true
     val dx = arrayOf(-1,1,0,0,-1,-1,1,1)
     val dy = arrayOf(0,0,-1,1,1,-1,1,-1)
