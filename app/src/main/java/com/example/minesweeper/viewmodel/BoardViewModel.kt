@@ -6,10 +6,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.minesweeper.data.Cell
+import com.example.minesweeper.room.GameDao
 import com.example.minesweeper.utils.CellBFS
 import com.example.minesweeper.utils.generateBoard
 
-class BoardViewModel : ViewModel() {
+class BoardViewModel(private val gameDao: GameDao): ViewModel() {
     private val size = 8
     private val minesCount = 10
     var cells : List<List<Cell>> by mutableStateOf(generateBoard(size, minesCount))

@@ -3,6 +3,7 @@ package com.example.minesweeper.view
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -30,10 +31,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.minesweeper.data.Cell
+import com.example.minesweeper.room.GameDatabase
 import com.example.minesweeper.ui.theme.MinesweeperTheme
 import com.example.minesweeper.utils.LogComposition
 import com.example.minesweeper.utils.TAG
 import com.example.minesweeper.viewmodel.BoardViewModel
+import com.example.minesweeper.viewmodel.ViewModelFactory
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 
@@ -42,7 +45,11 @@ class BoardActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MinesweeperTheme {
-                val viewModel: BoardViewModel = viewModel()
+                val viewModel: BoardViewModel by viewModels {
+                    ViewModelFactory(
+                        GameDatabase.getDatabase(applicationContext).getDao()
+                    )
+                }
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
