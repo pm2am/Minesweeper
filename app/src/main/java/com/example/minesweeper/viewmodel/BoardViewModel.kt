@@ -5,10 +5,16 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.minesweeper.data.Cell
+import com.example.minesweeper.data.GameEntity
 import com.example.minesweeper.room.GameDao
 import com.example.minesweeper.utils.CellBFS
+import com.example.minesweeper.utils.CellSerializer
 import com.example.minesweeper.utils.generateBoard
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class BoardViewModel(private val gameDao: GameDao): ViewModel() {
     private val size = 8
@@ -25,11 +31,27 @@ class BoardViewModel(private val gameDao: GameDao): ViewModel() {
     var timerKey = mutableIntStateOf(0)
         private set
 
-    fun updateBoard() {
+    fun resetBoard() {
+        viewModelScope.launch {
+            gameDao.deleteRecord()
+        }
         cells = generateBoard(size = size, minesCount = minesCount)
         revealedCount.intValue = size * size
         timer.intValue = 0
         timerKey.intValue++
+    }
+
+    fun saveGame() {
+        viewModelScope.launch {
+            val serializedCell = CellSerializer.serialize(cells)
+            val entity = GameEntity(
+                cells = serializedCell,
+                revealedCount = revealedCount.intValue,
+                timer = timer.intValue,
+                timerKey = timerKey.intValue
+            )
+            gameDao.insertGame(entity)
+        }
     }
 
     fun onCellClicked(rowIndex: Int, colIndex: Int) {

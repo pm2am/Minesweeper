@@ -89,11 +89,19 @@ fun InfoLayout(
     Text(
         text = "${timer.intValue}"
     )
-    ElevatedButton(onClick = {
-        viewModel.updateBoard()
-    }) {
-        Text(text = "RESET")
+    Row {
+        ElevatedButton(onClick = {
+            viewModel.resetBoard()
+        }) {
+            Text(text = "RESET")
+        }
+        ElevatedButton(onClick = {
+            viewModel.saveGame()
+        }) {
+            Text(text = "SAVE")
+        }
     }
+
     Text(
         text = when (viewModel.revealedCount.intValue) {
             -1 -> "LOSE"
@@ -105,7 +113,7 @@ fun InfoLayout(
                 color = when (viewModel.revealedCount.intValue) {
                     -1 -> Color.Red
                     10 -> Color.Magenta
-                    else -> Color.Cyan
+                    else -> Color.DarkGray
                 }
             )
             .padding(8.dp)

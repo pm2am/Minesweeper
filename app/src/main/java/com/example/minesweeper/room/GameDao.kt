@@ -10,9 +10,11 @@ import com.example.minesweeper.data.GameEntity
 interface GameDao {
 
     @Query("SELECT * FROM game_table")
-    fun getGames(): List<GameEntity>
+    suspend fun getGames(): List<GameEntity>
 
     @Insert
-    fun insertGame(entity: GameEntity)
+    suspend fun insertGame(entity: GameEntity)
 
+    @Query("DELETE FROM game_table")
+    suspend fun deleteRecord()
 }
