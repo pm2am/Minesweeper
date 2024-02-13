@@ -9,6 +9,5 @@ data class GameEntity(
     val id: Long = 0,
     val cells: String, // Serialized representation of the list of cells
     val revealedCount: Int,
-    val timer: Int,
-    val timerKey: Int
+    val timer: Int
 )

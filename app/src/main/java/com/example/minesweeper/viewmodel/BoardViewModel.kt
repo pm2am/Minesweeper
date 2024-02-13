@@ -47,8 +47,7 @@ class BoardViewModel(private val gameDao: GameDao): ViewModel() {
             val entity = GameEntity(
                 cells = serializedCell,
                 revealedCount = revealedCount.intValue,
-                timer = timer.intValue,
-                timerKey = timerKey.intValue
+                timer = timer.intValue
             )
             gameDao.insertGame(entity)
         }
