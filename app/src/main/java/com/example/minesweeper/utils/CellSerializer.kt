@@ -2,10 +2,14 @@ package com.example.minesweeper.utils
 
 import com.example.minesweeper.data.Cell
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 
 object CellSerializer {
-    private val gson = Gson()
+    val gson = GsonBuilder()
+    .registerTypeAdapter(Cell::class.java, CellAdapter)
+    .create()
+
 
     fun serialize(cells: List<List<Cell>>) : String {
         return gson.toJson(cells)

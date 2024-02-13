@@ -29,7 +29,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.minesweeper.data.Cell
 import com.example.minesweeper.room.GameDatabase
 import com.example.minesweeper.ui.theme.MinesweeperTheme
@@ -90,6 +89,11 @@ fun InfoLayout(
         text = "${timer.intValue}"
     )
     Row {
+        ElevatedButton(onClick = {
+            viewModel.resumeGame()
+        }) {
+            Text(text = "RESUME")
+        }
         ElevatedButton(onClick = {
             viewModel.resetBoard()
         }) {

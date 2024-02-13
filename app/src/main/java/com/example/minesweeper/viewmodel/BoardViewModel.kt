@@ -12,8 +12,6 @@ import com.example.minesweeper.room.GameDao
 import com.example.minesweeper.utils.CellBFS
 import com.example.minesweeper.utils.CellSerializer
 import com.example.minesweeper.utils.generateBoard
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class BoardViewModel(private val gameDao: GameDao): ViewModel() {
@@ -31,6 +29,18 @@ class BoardViewModel(private val gameDao: GameDao): ViewModel() {
     var timerKey = mutableIntStateOf(0)
         private set
 
+    fun resumeGame() {
+        viewModelScope.launch {
+            val listOfGames = gameDao.getGames()
+            if (listOfGames.isNotEmpty()) {
+                val saveGame = listOfGames[0]
+                val saveCells = CellSerializer.deserialize(saveGame.cells)
+                revealedCount.intValue = saveGame.revealedCount
+                timer.intValue = saveGame.timer
+            }
+        }
+    }
+
     fun resetBoard() {
         viewModelScope.launch {
             gameDao.deleteRecord()
@@ -43,6 +53,7 @@ class BoardViewModel(private val gameDao: GameDao): ViewModel() {
 
     fun saveGame() {
         viewModelScope.launch {
+            gameDao.deleteRecord()
             val serializedCell = CellSerializer.serialize(cells)
             val entity = GameEntity(
                 cells = serializedCell,
