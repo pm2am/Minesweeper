@@ -34,7 +34,8 @@ class BoardViewModel(private val gameDao: GameDao): ViewModel() {
             val listOfGames = gameDao.getGames()
             if (listOfGames.isNotEmpty()) {
                 val saveGame = listOfGames[0]
-                val saveCells = CellSerializer.deserialize(saveGame.cells)
+                val saveCells: List<List<Cell>> = CellSerializer.deserialize(saveGame.cells)
+                cells = saveCells
                 revealedCount.intValue = saveGame.revealedCount
                 timer.intValue = saveGame.timer
             }
