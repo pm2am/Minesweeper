@@ -1,9 +1,6 @@
 package com.example.minesweeper.utils
 
 import com.example.minesweeper.data.Cell
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
 import org.json.JSONArray
 
 object CellSerializer {
