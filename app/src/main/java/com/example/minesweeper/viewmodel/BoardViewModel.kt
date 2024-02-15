@@ -7,7 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.minesweeper.data.Cell
-import com.example.minesweeper.data.GameEntity
+import com.example.minesweeper.room.GameEntity
 import com.example.minesweeper.room.GameDao
 import com.example.minesweeper.utils.CellBFS
 import com.example.minesweeper.utils.CellSerializer
