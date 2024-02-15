@@ -80,8 +80,8 @@ dependencies {
     implementation("androidx.room:room-ktx:$2.6.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
 
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-compiler:2.44")
+    implementation("com.google.dagger:hilt-android:2.48")
+    kapt("com.google.dagger:hilt-compiler:2.48")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
 }
