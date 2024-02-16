@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BoardViewModel @Inject  constructor(private val gameDao: GameDao): ViewModel() {
-    private val size = 8
+    private val size = 9
     private val minesCount = 10
     var cells : List<List<Cell>> by mutableStateOf(initializeBoard(size))
         private set
@@ -73,7 +73,7 @@ class BoardViewModel @Inject  constructor(private val gameDao: GameDao): ViewMod
         if (revealedCount.intValue == size*size) {
             generateBoard(cells, minesCount, rowIndex, colIndex)
         }
-        if (cells[rowIndex][colIndex].isRevealed || revealedCount.intValue==-1 || revealedCount.intValue==10) {
+        if (cells[rowIndex][colIndex].isRevealed || revealedCount.intValue==-1 || revealedCount.intValue==minesCount) {
             return
         }
         if (cells[rowIndex][colIndex].isMined) {
