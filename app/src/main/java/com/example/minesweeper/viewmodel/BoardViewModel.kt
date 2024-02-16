@@ -12,6 +12,7 @@ import com.example.minesweeper.room.GameDao
 import com.example.minesweeper.utils.CellBFS
 import com.example.minesweeper.utils.CellSerializer
 import com.example.minesweeper.utils.generateBoard
+import com.example.minesweeper.utils.initializeBoard
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,7 +21,7 @@ import javax.inject.Inject
 class BoardViewModel @Inject  constructor(private val gameDao: GameDao): ViewModel() {
     private val size = 8
     private val minesCount = 10
-    var cells : List<List<Cell>> by mutableStateOf(generateBoard(size, minesCount))
+    var cells : List<List<Cell>> by mutableStateOf(initializeBoard(size))
         private set
 
     var revealedCount = mutableIntStateOf(size*size)
@@ -49,7 +50,7 @@ class BoardViewModel @Inject  constructor(private val gameDao: GameDao): ViewMod
         viewModelScope.launch {
             gameDao.deleteRecord()
         }
-        cells = generateBoard(size = size, minesCount = minesCount)
+        cells = initializeBoard(size = size)
         revealedCount.intValue = size * size
         timer.intValue = 0
         timerKey.intValue++
@@ -69,6 +70,9 @@ class BoardViewModel @Inject  constructor(private val gameDao: GameDao): ViewMod
     }
 
     fun onCellClicked(rowIndex: Int, colIndex: Int) {
+        if (revealedCount.intValue == size*size) {
+            generateBoard(cells, minesCount, rowIndex, colIndex)
+        }
         if (cells[rowIndex][colIndex].isRevealed || revealedCount.intValue==-1 || revealedCount.intValue==10) {
             return
         }

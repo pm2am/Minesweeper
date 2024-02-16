@@ -3,22 +3,26 @@ package com.example.minesweeper.utils
 import com.example.minesweeper.data.Cell
 import kotlin.random.Random
 
-fun generateBoard(size: Int, minesCount: Int) : List<List<Cell>> {
+fun initializeBoard(size: Int) : List<List<Cell>> {
     val board = List(size) {
         List(size) {
             Cell()
         }
     }
+    return board
+}
+
+fun generateBoard(board: List<List<Cell>>, minesCount: Int, cRow: Int, cCol: Int) {
+    val size = board.size
     repeat(minesCount) {
         var row: Int
         var col: Int
         do {
             row = Random.nextInt(size) % size
             col = Random.nextInt(size) % size
-        } while (board[row][col].isMined)
+        } while ((row==cRow && col == cCol) || board[row][col].isMined)
         updateCellAround(row, col, board)
     }
-    return board
 }
 
 private fun updateCellAround(x: Int, y: Int, board: List<List<Cell>>) {

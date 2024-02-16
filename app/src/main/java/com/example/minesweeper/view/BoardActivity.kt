@@ -3,7 +3,6 @@ package com.example.minesweeper.view
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -24,24 +23,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import com.example.minesweeper.data.Cell
-import com.example.minesweeper.room.GameDatabase
 import com.example.minesweeper.ui.theme.MinesweeperTheme
 import com.example.minesweeper.utils.LogComposition
 import com.example.minesweeper.utils.TAG
 import com.example.minesweeper.viewmodel.BoardViewModel
-import com.example.minesweeper.viewmodel.ViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
-import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
