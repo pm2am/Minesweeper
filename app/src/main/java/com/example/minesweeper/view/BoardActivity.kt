@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +22,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -60,7 +62,7 @@ class BoardActivity : ComponentActivity() {
 @Composable
 fun Board(viewModel: BoardViewModel) {
     LogComposition(tag = TAG, msg = "Board")
-    Column {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
         LogComposition(tag = TAG, msg = "Column")
         GridWithColors(viewModel)
         InfoLayout(viewModel)
@@ -122,9 +124,14 @@ fun InfoLayout(
 
 @Composable
 fun GridWithColors(viewModel: BoardViewModel) {
-    LazyVerticalGrid(columns = GridCells.Fixed(1)) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(1)
+    ) {
         items(viewModel.cells.size) { rowIndex ->
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
                 LogComposition(tag = TAG, msg = "Row")
                 for (colIndex in viewModel.cells[rowIndex].indices) {
                     CellScope(rowIndex = rowIndex, colIndex = colIndex, viewModel)
