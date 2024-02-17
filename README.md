@@ -7,7 +7,7 @@ Functional Requirements:
   - Timer: Timer to track the time taken by the player.
   - Restart Option: Players should be able to restart the game at any time, either from the beginning or from the current state.
   - Save/Load Game: The game might allow players to save their progress and resume it later.
-  - Playing condition 1: First click on a cell should never be mine.
+  - Playing condition 1: First click on a cell of a new game should never be mine.
 
 Nonfunctional Requirements:
   - Performance: Game should be responsive and run smoothly. Meaning fast loading time, quick response from the player's action
