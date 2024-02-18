@@ -17,17 +17,25 @@ import com.example.minesweeper.view.MinesApp
 
 @Composable
 fun MainScreen(
-    onButtonClicked: () -> Unit
+    onBoardClicked: () -> Unit = {},
+    onScoreClicked: ()-> Unit = {}
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        ElevatedButton(onClick = onButtonClicked,
+        ElevatedButton(onClick = onBoardClicked,
         ) {
             Text(
                 text = "Board",
                 )
+        }
+
+        ElevatedButton(onClick = onScoreClicked,
+        ) {
+            Text(
+                text = "Score",
+            )
         }
     }
 }
@@ -39,6 +47,6 @@ fun MainScreenPreview() {
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        MainScreen(onButtonClicked = {})
+        MainScreen()
     }
 }

@@ -11,20 +11,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.minesweeper.ui.screen.Board
 import com.example.minesweeper.ui.screen.MainScreen
+import com.example.minesweeper.ui.screen.ScoreScreen
 import com.example.minesweeper.ui.theme.MinesweeperTheme
 import com.example.minesweeper.viewmodel.BoardViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 enum class ScreenRoute {
     Main,
-    Board
+    Board,
+    Score
 }
 
 @AndroidEntryPoint
@@ -55,12 +56,20 @@ fun MinesApp(viewModel: BoardViewModel, navController: NavHostController) {
         modifier = Modifier.padding(4.dp)
         ) {
         composable(ScreenRoute.Main.name) {
-            MainScreen {
-                navController.navigate(ScreenRoute.Board.name)
-            }
+            MainScreen(
+                onBoardClicked = {
+                    navController.navigate(ScreenRoute.Board.name)
+                },
+                onScoreClicked = {
+                    navController.navigate(ScreenRoute.Score.name)
+                }
+            )
         }
         composable(ScreenRoute.Board.name) {
             Board(viewModel = viewModel)
+        }
+        composable(ScreenRoute.Score.name) {
+            ScoreScreen(viewModel = viewModel)
         }
     }
 }
