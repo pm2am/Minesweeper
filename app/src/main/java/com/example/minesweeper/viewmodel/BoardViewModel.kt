@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class BoardViewModel @Inject  constructor(private val gameDao: GameDao): ViewModel() {
+class BoardViewModel @Inject constructor(private val gameDao: GameDao): ViewModel() {
     private val size = 9
     private val minesCount = 10
     var cells : List<List<Cell>> by mutableStateOf(initializeBoard(size))
