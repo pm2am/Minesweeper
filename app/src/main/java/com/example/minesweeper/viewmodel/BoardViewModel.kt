@@ -33,7 +33,9 @@ class BoardViewModel @Inject constructor(private val gameDao: GameDao): ViewMode
     var timerKey = mutableIntStateOf(0)
         private set
 
-    fun resumeGame() {
+    var shouldShowResume = mutableStateOf(false)
+
+    fun resumeOrNotGame() {
         viewModelScope.launch {
             val listOfGames = gameDao.getGames()
             if (listOfGames.isNotEmpty()) {
@@ -42,6 +44,9 @@ class BoardViewModel @Inject constructor(private val gameDao: GameDao): ViewMode
                 cells = saveCells
                 revealedCount.intValue = saveGame.revealedCount
                 timer.intValue = saveGame.timer
+                shouldShowResume.value = true
+            } else {
+                shouldShowResume.value = false
             }
         }
     }

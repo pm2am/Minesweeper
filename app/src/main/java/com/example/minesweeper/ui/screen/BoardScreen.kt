@@ -35,7 +35,7 @@ import kotlin.time.Duration.Companion.seconds
 
 
 @Composable
-fun Board(viewModel: BoardViewModel) {
+fun BoardScreen(viewModel: BoardViewModel) {
     LogComposition(tag = TAG, msg = "Board")
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         LogComposition(tag = TAG, msg = "Column")
@@ -62,11 +62,6 @@ fun InfoLayout(
         text = "${timer.intValue}"
     )
     Row {
-        ElevatedButton(onClick = {
-            viewModel.resumeGame()
-        }) {
-            Text(text = "RESUME")
-        }
         ElevatedButton(onClick = {
             viewModel.resetBoard()
         }) {

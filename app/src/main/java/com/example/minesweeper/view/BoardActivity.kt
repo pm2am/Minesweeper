@@ -8,14 +8,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.minesweeper.ui.screen.Board
+import com.example.minesweeper.ui.screen.BoardScreen
 import com.example.minesweeper.ui.screen.MainScreen
 import com.example.minesweeper.ui.screen.ScoreScreen
 import com.example.minesweeper.ui.theme.MinesweeperTheme
@@ -50,6 +53,17 @@ class BoardActivity : ComponentActivity() {
 
 @Composable
 fun MinesApp(viewModel: BoardViewModel, navController: NavHostController) {
+
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+
+    LaunchedEffect(currentBackStackEntry) {
+        currentBackStackEntry?.let { navBackStackEntry ->
+            if (navBackStackEntry.destination.route == ScreenRoute.Main.name) {
+                viewModel.resumeOrNotGame()
+            }
+        }
+    }
+
     NavHost(
         navController = navController,
         startDestination = ScreenRoute.Main.name,
@@ -57,6 +71,7 @@ fun MinesApp(viewModel: BoardViewModel, navController: NavHostController) {
         ) {
         composable(ScreenRoute.Main.name) {
             MainScreen(
+                viewModel = viewModel,
                 onBoardClicked = {
                     navController.navigate(ScreenRoute.Board.name)
                 },
@@ -66,7 +81,7 @@ fun MinesApp(viewModel: BoardViewModel, navController: NavHostController) {
             )
         }
         composable(ScreenRoute.Board.name) {
-            Board(viewModel = viewModel)
+            BoardScreen(viewModel = viewModel)
         }
         composable(ScreenRoute.Score.name) {
             ScoreScreen(viewModel = viewModel)
