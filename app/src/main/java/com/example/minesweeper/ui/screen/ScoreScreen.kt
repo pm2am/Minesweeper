@@ -10,9 +10,5 @@ import com.example.minesweeper.viewmodel.BoardViewModel
 fun ScoreScreen(viewModel: BoardViewModel) {
     Column {
         Text(text ="Score Screen ${viewModel.scoreState.value.winCount}/${viewModel.scoreState.value.lossCount}")
-        ElevatedButton(onClick = { viewModel.addDefaultScore() }) {
-            Text(text = "Add Default")
-        }
     }
-
 }

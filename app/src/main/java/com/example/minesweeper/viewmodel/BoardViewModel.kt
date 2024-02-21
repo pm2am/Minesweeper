@@ -97,14 +97,22 @@ class BoardViewModel @Inject constructor(
             cells[rowIndex][colIndex].isRevealed = true
             revealedCount.intValue--
         }
-    }
-
-    fun addDefaultScore() {
         viewModelScope.launch {
-            val entity = scoreDao.getScore(1L)
-            scoreState.value.winCount = entity.winCount
-            scoreState.value.lossCount = entity.lossCount
+            if (revealedCount.intValue==-1) {
+                scoreDao.updateLossCount(1L)
+            } else if (revealedCount.intValue == 10) {
+                scoreDao.updateWinCount(1L)
+            }
         }
     }
 
+    fun updateScoreState() {
+        viewModelScope.launch {
+            val entity = scoreDao.getScore(1L)
+            scoreState.value.apply {
+                winCount = entity.winCount
+                lossCount = entity.lossCount
+            }
+        }
+    }
 }

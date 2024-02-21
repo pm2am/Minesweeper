@@ -39,7 +39,11 @@ fun MainScreen(
                 )
         }
 
-        ElevatedButton(onClick = onScoreClicked,
+        ElevatedButton(
+            onClick = {
+                viewModel.updateScoreState()
+                onScoreClicked()
+            }
         ) {
             Text(
                 text = "Score",
