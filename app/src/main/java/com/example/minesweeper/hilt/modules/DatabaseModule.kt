@@ -8,6 +8,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.minesweeper.room.GameDao
 import com.example.minesweeper.room.GameDatabase
 import com.example.minesweeper.room.ScoreDao
+import com.example.minesweeper.utils.TAG
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -43,7 +44,7 @@ object DatabaseModule {
             object : RoomDatabase.Callback() {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
-                    Log.i("DatabaseModule", "onCreate database")
+                    db.execSQL("INSERT INTO score_table VALUES(1, 0, 0)")
                 }
             }
         ).build()

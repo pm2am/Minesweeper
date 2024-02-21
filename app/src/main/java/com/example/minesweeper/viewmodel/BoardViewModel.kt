@@ -102,12 +102,6 @@ class BoardViewModel @Inject constructor(
 
     fun addDefaultScore() {
         viewModelScope.launch {
-            scoreDao.insertScore(
-                id = 1L,
-                1,
-                1
-            )
-
             val entity = scoreDao.getScore(1L)
             scoreState.value.winCount = entity.winCount
             scoreState.value.lossCount = entity.lossCount

@@ -22,6 +22,8 @@ import com.example.minesweeper.ui.screen.BoardScreen
 import com.example.minesweeper.ui.screen.MainScreen
 import com.example.minesweeper.ui.screen.ScoreScreen
 import com.example.minesweeper.ui.theme.MinesweeperTheme
+import com.example.minesweeper.utils.LogComposition
+import com.example.minesweeper.utils.TAG
 import com.example.minesweeper.viewmodel.BoardViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
