@@ -1,4 +1,4 @@
-package com.example.minesweeper.room
+package com.example.minesweeper.room.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

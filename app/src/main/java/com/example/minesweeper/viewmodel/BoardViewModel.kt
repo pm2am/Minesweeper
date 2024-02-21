@@ -8,10 +8,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.minesweeper.data.Cell
 import com.example.minesweeper.data.Score
-import com.example.minesweeper.room.GameEntity
-import com.example.minesweeper.room.GameDao
-import com.example.minesweeper.room.ScoreDao
-import com.example.minesweeper.room.ScoreEntity
+import com.example.minesweeper.room.entity.GameEntity
+import com.example.minesweeper.room.dao.GameDao
+import com.example.minesweeper.room.dao.ScoreDao
 import com.example.minesweeper.utils.CellBFS
 import com.example.minesweeper.utils.CellSerializer
 import com.example.minesweeper.utils.generateBoard

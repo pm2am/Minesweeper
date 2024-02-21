@@ -1,8 +1,9 @@
-package com.example.minesweeper.room
+package com.example.minesweeper.room.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import com.example.minesweeper.room.entity.GameEntity
 
 @Dao
 interface GameDao {
