@@ -7,8 +7,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.minesweeper.data.Cell
+import com.example.minesweeper.data.Score
 import com.example.minesweeper.room.GameEntity
 import com.example.minesweeper.room.GameDao
+import com.example.minesweeper.room.ScoreDao
+import com.example.minesweeper.room.ScoreEntity
 import com.example.minesweeper.utils.CellBFS
 import com.example.minesweeper.utils.CellSerializer
 import com.example.minesweeper.utils.generateBoard
@@ -18,7 +21,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class BoardViewModel @Inject constructor(private val gameDao: GameDao): ViewModel() {
+class BoardViewModel @Inject constructor(
+    private val gameDao: GameDao,
+    private val scoreDao: ScoreDao
+): ViewModel() {
     private val size = 9
     private val minesCount = 10
     var cells : List<List<Cell>> by mutableStateOf(initializeBoard(size))
@@ -34,6 +40,8 @@ class BoardViewModel @Inject constructor(private val gameDao: GameDao): ViewMode
         private set
 
     var shouldShowResume = mutableStateOf(false)
+
+    var scoreState = mutableStateOf(Score(0,0))
 
     fun resumeOrNotGame() {
         viewModelScope.launch {
@@ -91,4 +99,19 @@ class BoardViewModel @Inject constructor(private val gameDao: GameDao): ViewMode
             revealedCount.intValue--
         }
     }
+
+    fun addDefaultScore() {
+        viewModelScope.launch {
+            scoreDao.insertScore(
+                id = 1L,
+                1,
+                1
+            )
+
+            val entity = scoreDao.getScore(1L)
+            scoreState.value.winCount = entity.winCount
+            scoreState.value.lossCount = entity.lossCount
+        }
+    }
+
 }
