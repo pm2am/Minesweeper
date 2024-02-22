@@ -5,11 +5,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.findViewTreeViewModelStoreOwner
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import com.example.minesweeper.viewmodel.BoardViewModel
 
 @Composable
@@ -20,6 +20,11 @@ fun MainScreen(
     val viewModel = LocalView.current.findViewTreeViewModelStoreOwner()?.let {
         hiltViewModel<BoardViewModel>(it)
     }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel?.resumeOrNotGame()
+    }
+
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
