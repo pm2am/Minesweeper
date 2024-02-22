@@ -3,6 +3,7 @@ package com.example.minesweeper.view
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -39,14 +40,13 @@ class BoardActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val viewModel: BoardViewModel = hiltViewModel()
             val navController = rememberNavController()
             MinesweeperTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MinesApp(viewModel = viewModel, navController = navController)
+                    MinesApp(navController = navController)
                 }
             }
         }
@@ -54,14 +54,14 @@ class BoardActivity : ComponentActivity() {
 }
 
 @Composable
-fun MinesApp(viewModel: BoardViewModel, navController: NavHostController) {
+fun MinesApp(navController: NavHostController) {
 
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
 
     LaunchedEffect(currentBackStackEntry) {
         currentBackStackEntry?.let { navBackStackEntry ->
             if (navBackStackEntry.destination.route == ScreenRoute.Main.name) {
-                viewModel.resumeOrNotGame()
+//                viewModel.resumeOrNotGame()
             }
         }
     }
@@ -73,7 +73,6 @@ fun MinesApp(viewModel: BoardViewModel, navController: NavHostController) {
         ) {
         composable(ScreenRoute.Main.name) {
             MainScreen(
-                viewModel = viewModel,
                 onBoardClicked = {
                     navController.navigate(ScreenRoute.Board.name)
                 },
@@ -83,10 +82,10 @@ fun MinesApp(viewModel: BoardViewModel, navController: NavHostController) {
             )
         }
         composable(ScreenRoute.Board.name) {
-            BoardScreen(viewModel = viewModel)
+            BoardScreen()
         }
         composable(ScreenRoute.Score.name) {
-            ScoreScreen(viewModel = viewModel)
+            ScoreScreen()
         }
     }
 }
