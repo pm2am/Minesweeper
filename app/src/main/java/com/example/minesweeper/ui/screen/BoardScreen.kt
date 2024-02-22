@@ -21,11 +21,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import com.example.minesweeper.data.Cell
 import com.example.minesweeper.utils.LogComposition
 import com.example.minesweeper.utils.TAG
@@ -35,12 +38,18 @@ import kotlin.time.Duration.Companion.seconds
 
 
 @Composable
-fun BoardScreen(viewModel: BoardViewModel) {
+fun BoardScreen() {
+    val viewModel = LocalView.current.findViewTreeViewModelStoreOwner()?.let {
+        hiltViewModel<BoardViewModel>(it)
+    }
+
     LogComposition(tag = TAG, msg = "Board")
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         LogComposition(tag = TAG, msg = "Column")
-        GridWithColors(viewModel)
-        InfoLayout(viewModel)
+        viewModel?.let {
+            GridWithColors(it)
+            InfoLayout(it)
+        }
     }
 }
 

@@ -6,20 +6,26 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalView
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.findViewTreeViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import com.example.minesweeper.viewmodel.BoardViewModel
 
 @Composable
 fun MainScreen(
-    viewModel: BoardViewModel,
     onBoardClicked: () -> Unit = {},
     onScoreClicked: () -> Unit = {}
 ) {
+    val viewModel = LocalView.current.findViewTreeViewModelStoreOwner()?.let {
+        hiltViewModel<BoardViewModel>(it)
+    }
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        if (viewModel.shouldShowResume.value) {
+        if (viewModel?.shouldShowResume?.value == true) {
             ElevatedButton(onClick = onBoardClicked,
             ) {
                 Text(
@@ -30,7 +36,7 @@ fun MainScreen(
 
         ElevatedButton(
             onClick = {
-                viewModel.resetBoard()
+                viewModel?.resetBoard()
                 onBoardClicked()
             },
         ) {
@@ -41,7 +47,7 @@ fun MainScreen(
 
         ElevatedButton(
             onClick = {
-                viewModel.updateScoreState()
+                viewModel?.updateScoreState()
                 onScoreClicked()
             }
         ) {
