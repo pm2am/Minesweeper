@@ -6,7 +6,8 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "score_table")
 data class ScoreEntity(
     @PrimaryKey
-    val id: Long = 0,
+    val date: String,
+    var timeCreated: Long,
     var winCount: Int,
     var lossCount: Int
 )

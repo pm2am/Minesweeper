@@ -2,21 +2,24 @@ package com.example.minesweeper.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.minesweeper.data.Cell
 import com.example.minesweeper.data.Score
-import com.example.minesweeper.room.entity.GameEntity
 import com.example.minesweeper.room.dao.GameDao
 import com.example.minesweeper.room.dao.ScoreDao
+import com.example.minesweeper.room.entity.GameEntity
 import com.example.minesweeper.utils.CellBFS
 import com.example.minesweeper.utils.CellSerializer
+import com.example.minesweeper.utils.DateFormatter
 import com.example.minesweeper.utils.generateBoard
 import com.example.minesweeper.utils.initializeBoard
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,7 +43,7 @@ class BoardViewModel @Inject constructor(
 
     var shouldShowResume = mutableStateOf(false)
 
-    var scoreState = mutableStateOf(Score(0,0))
+    var scores = mutableStateListOf<Score>()
 
     fun resumeOrNotGame() {
         viewModelScope.launch {
@@ -97,22 +100,30 @@ class BoardViewModel @Inject constructor(
             cells[rowIndex][colIndex].isRevealed = true
             revealedCount.intValue--
         }
-        viewModelScope.launch {
-            if (revealedCount.intValue==-1) {
-                scoreDao.updateLossCount(1L)
-            } else if (revealedCount.intValue == 10) {
-                scoreDao.updateWinCount(1L)
+        if (revealedCount.intValue==-1 || revealedCount.intValue==10) {
+            viewModelScope.launch {
+                val currentDate = Date()
+                val dateString = DateFormatter.formatter.format(currentDate)
+                val entity = scoreDao.getScoreByDate(dateString)
+                if (entity==null) {
+                    scoreDao.insertScore(dateString, currentDate.time, 0, 0 )
+                }
+                if (revealedCount.intValue == 10) {
+                    scoreDao.updateWinCount(dateString)
+                } else if (revealedCount.intValue==-1) {
+                    scoreDao.updateLossCount(dateString)
+                }
             }
         }
     }
 
     fun updateScoreState() {
         viewModelScope.launch {
-            val entity = scoreDao.getScore(1L)
-            scoreState.value.apply {
-                winCount = entity.winCount
-                lossCount = entity.lossCount
+            scores.clear()
+            val listOfScore = scoreDao.getScore().map {
+                Score(it.date, it.winCount, it.lossCount)
             }
+            scores.addAll(listOfScore)
         }
     }
 }

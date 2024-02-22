@@ -1,7 +1,9 @@
 package com.example.minesweeper.utils
 
 import com.example.minesweeper.data.Cell
+import java.text.SimpleDateFormat
 import java.util.LinkedList
+import java.util.Locale
 import java.util.Queue
 
 fun CellBFS(row: Int, col: Int, data: List<List<Cell>>) : Int {
@@ -25,4 +27,8 @@ fun CellBFS(row: Int, col: Int, data: List<List<Cell>>) : Int {
         }
     }
     return revealedCount
+}
+
+object DateFormatter {
+    var formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 }

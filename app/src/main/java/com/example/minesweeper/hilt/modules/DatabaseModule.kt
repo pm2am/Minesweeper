@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.example.minesweeper.room.dao.GameDao
 import com.example.minesweeper.room.GameDatabase
+import com.example.minesweeper.room.dao.GameDao
 import com.example.minesweeper.room.dao.ScoreDao
 import dagger.Module
 import dagger.Provides
@@ -39,7 +39,7 @@ object DatabaseModule {
             object : RoomDatabase.Callback() {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
-                    db.execSQL("INSERT INTO score_table VALUES(1, 0, 0)")
+                    //NOTHING TO DO HERE
                 }
             }
         ).build()

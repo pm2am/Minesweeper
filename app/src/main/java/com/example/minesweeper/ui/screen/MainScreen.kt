@@ -52,7 +52,6 @@ fun MainScreen(
 
         ElevatedButton(
             onClick = {
-                viewModel?.updateScoreState()
                 onScoreClicked()
             }
         ) {
