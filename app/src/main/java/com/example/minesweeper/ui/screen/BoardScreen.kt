@@ -44,19 +44,21 @@ fun BoardScreen() {
     }
 
     LogComposition(tag = TAG, msg = "Board")
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
         LogComposition(tag = TAG, msg = "Column")
         viewModel?.let {
+            TopLayout(viewModel = it)
             GridWithColors(it)
-            InfoLayout(it)
+            BottomLayout(it)
         }
     }
 }
 
 @Composable
-fun InfoLayout(
-    viewModel: BoardViewModel
-) {
+fun TopLayout(viewModel: BoardViewModel) {
     val timer = viewModel.timer
     val timerKey = viewModel.timerKey
 
@@ -67,9 +69,37 @@ fun InfoLayout(
         }
     }
 
-    Text(
-        text = "${timer.intValue}"
-    )
+    Row (
+        Modifier.fillMaxWidth().padding(10.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = "Time: ${timer.intValue} s"
+        )
+
+        Text(
+            text = when (viewModel.revealedCount.intValue) {
+                -1 -> "LOSE"
+                10 -> "WIN"
+                else -> "Count: ${viewModel.revealedCount.intValue}"
+            },
+            Modifier
+                .background(
+                    color = when (viewModel.revealedCount.intValue) {
+                        -1 -> Color.Red
+                        10 -> Color.Magenta
+                        else -> Color.DarkGray
+                    }
+                )
+        )
+    }
+
+}
+
+@Composable
+fun BottomLayout(
+    viewModel: BoardViewModel
+) {
     Row {
         ElevatedButton(onClick = {
             viewModel.resetBoard()
@@ -82,23 +112,6 @@ fun InfoLayout(
             Text(text = "SAVE")
         }
     }
-
-    Text(
-        text = when (viewModel.revealedCount.intValue) {
-            -1 -> "LOSE"
-            10 -> "WIN"
-            else -> "Count: ${viewModel.revealedCount.intValue}"
-        },
-        Modifier
-            .background(
-                color = when (viewModel.revealedCount.intValue) {
-                    -1 -> Color.Red
-                    10 -> Color.Magenta
-                    else -> Color.DarkGray
-                }
-            )
-            .padding(8.dp)
-    )
 }
 
 @Composable
