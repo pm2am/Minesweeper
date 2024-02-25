@@ -120,7 +120,7 @@ class BoardViewModel @Inject constructor(
     fun updateScoreState() {
         viewModelScope.launch {
             scores.clear()
-            val listOfScore = scoreDao.getScore().map {
+            val listOfScore = scoreDao.getScore().reversed().map {
                 Score(it.date, it.winCount, it.lossCount)
             }
             scores.addAll(listOfScore)
