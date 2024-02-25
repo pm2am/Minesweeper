@@ -70,7 +70,9 @@ fun TopLayout(viewModel: BoardViewModel) {
     }
 
     Row (
-        Modifier.fillMaxWidth().padding(10.dp),
+        Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(

@@ -3,6 +3,7 @@ package com.example.minesweeper.view
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -18,6 +19,7 @@ import com.example.minesweeper.ui.screen.BoardScreen
 import com.example.minesweeper.ui.screen.MainScreen
 import com.example.minesweeper.ui.screen.ScoreScreen
 import com.example.minesweeper.ui.theme.MinesweeperTheme
+import com.example.minesweeper.viewmodel.BoardViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 enum class ScreenRoute {
@@ -28,6 +30,8 @@ enum class ScreenRoute {
 
 @AndroidEntryPoint
 class BoardActivity : ComponentActivity() {
+
+    private val viewModel: BoardViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +46,11 @@ class BoardActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.saveGame()
     }
 }
 
