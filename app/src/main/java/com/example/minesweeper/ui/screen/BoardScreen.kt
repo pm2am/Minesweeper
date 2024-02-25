@@ -122,7 +122,7 @@ fun GridWithColors(viewModel: BoardViewModel) {
         items(viewModel.cells.size) { rowIndex ->
             Row(
                 Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.Center
             ) {
                 LogComposition(tag = TAG, msg = "Row")
                 for (colIndex in viewModel.cells[rowIndex].indices) {
