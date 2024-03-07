@@ -14,6 +14,10 @@ import com.example.minesweeper.room.dao.ScoreDao
 import com.example.minesweeper.room.entity.GameEntity
 import com.example.minesweeper.utils.CellBFS
 import com.example.minesweeper.utils.CellSerializer
+import com.example.minesweeper.utils.Constants.BOARD_LOSE_STATE
+import com.example.minesweeper.utils.Constants.BOARD_MINE_COUNT
+import com.example.minesweeper.utils.Constants.BOARD_SIZE
+import com.example.minesweeper.utils.Constants.BOARD_WIN_STATE
 import com.example.minesweeper.utils.DateFormatter
 import com.example.minesweeper.utils.generateBoard
 import com.example.minesweeper.utils.initializeBoard
@@ -27,8 +31,8 @@ class BoardViewModel @Inject constructor(
     private val gameDao: GameDao,
     private val scoreDao: ScoreDao
 ): ViewModel() {
-    private val size = 9
-    private val minesCount = 10
+    private val size = BOARD_SIZE
+    private val minesCount = BOARD_MINE_COUNT
     var cells : List<List<Cell>> by mutableStateOf(initializeBoard(size))
         private set
 
@@ -88,11 +92,12 @@ class BoardViewModel @Inject constructor(
         if (revealedCount.intValue == size*size) {
             generateBoard(cells, minesCount, rowIndex, colIndex)
         }
-        if (cells[rowIndex][colIndex].isRevealed || revealedCount.intValue==-1 || revealedCount.intValue==minesCount) {
+        if (cells[rowIndex][colIndex].isRevealed
+            || revealedCount.intValue==BOARD_LOSE_STATE || revealedCount.intValue==BOARD_WIN_STATE) {
             return
         }
         if (cells[rowIndex][colIndex].isMined) {
-            revealedCount.intValue = -1
+            revealedCount.intValue = BOARD_LOSE_STATE
             cells[rowIndex][colIndex].isRevealed = true
         } else if (cells[rowIndex][colIndex].minesAround==0) {
             revealedCount.intValue -= CellBFS(rowIndex, colIndex, data = cells)
@@ -100,7 +105,7 @@ class BoardViewModel @Inject constructor(
             cells[rowIndex][colIndex].isRevealed = true
             revealedCount.intValue--
         }
-        if (revealedCount.intValue==-1 || revealedCount.intValue==10) {
+        if (revealedCount.intValue==BOARD_LOSE_STATE || revealedCount.intValue==BOARD_WIN_STATE) {
             viewModelScope.launch {
                 val currentDate = Date()
                 val dateString = DateFormatter.formatter.format(currentDate)
@@ -108,9 +113,9 @@ class BoardViewModel @Inject constructor(
                 if (entity==null) {
                     scoreDao.insertScore(dateString, currentDate.time, 0, 0 )
                 }
-                if (revealedCount.intValue == 10) {
+                if (revealedCount.intValue == BOARD_WIN_STATE) {
                     scoreDao.updateWinCount(dateString)
-                } else if (revealedCount.intValue==-1) {
+                } else if (revealedCount.intValue==BOARD_LOSE_STATE) {
                     scoreDao.updateLossCount(dateString)
                 }
             }

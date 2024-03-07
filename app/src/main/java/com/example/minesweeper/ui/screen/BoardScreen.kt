@@ -30,6 +30,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import com.example.minesweeper.data.Cell
+import com.example.minesweeper.utils.Constants.BOARD_LOSE_STATE
+import com.example.minesweeper.utils.Constants.BOARD_WIN_STATE
 import com.example.minesweeper.utils.LogComposition
 import com.example.minesweeper.utils.TAG
 import com.example.minesweeper.viewmodel.BoardViewModel
@@ -63,7 +65,7 @@ fun TopLayout(viewModel: BoardViewModel) {
     val timerKey = viewModel.timerKey
 
     LaunchedEffect(key1 = timerKey.intValue) {
-        while (viewModel.revealedCount.intValue!=-1 && viewModel.revealedCount.intValue!=10) {
+        while (viewModel.revealedCount.intValue!= BOARD_WIN_STATE && viewModel.revealedCount.intValue!= BOARD_LOSE_STATE) {
             timer.intValue++
             delay(1.seconds)
         }
@@ -81,15 +83,15 @@ fun TopLayout(viewModel: BoardViewModel) {
 
         Text(
             text = when (viewModel.revealedCount.intValue) {
-                -1 -> "LOSE"
-                10 -> "WIN"
+                BOARD_LOSE_STATE -> "LOSE"
+                BOARD_WIN_STATE -> "WIN"
                 else -> "Count: ${viewModel.revealedCount.intValue}"
             },
             Modifier
                 .background(
                     color = when (viewModel.revealedCount.intValue) {
-                        -1 -> Color.Red
-                        10 -> Color.Magenta
+                        BOARD_LOSE_STATE -> Color.Red
+                        BOARD_WIN_STATE -> Color.Magenta
                         else -> Color.DarkGray
                     }
                 )
