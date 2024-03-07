@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.findViewTreeViewModelStoreOwner
+import com.example.minesweeper.R
 import com.example.minesweeper.data.Cell
 import com.example.minesweeper.utils.Constants.BOARD_LOSE_STATE
 import com.example.minesweeper.utils.Constants.BOARD_WIN_STATE
@@ -78,14 +80,14 @@ fun TopLayout(viewModel: BoardViewModel) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = "Time: ${timer.intValue} s"
+            text = stringResource(id = R.string.board_time, viewModel.timer.intValue)
         )
 
         Text(
             text = when (viewModel.revealedCount.intValue) {
-                BOARD_LOSE_STATE -> "LOSE"
-                BOARD_WIN_STATE -> "WIN"
-                else -> "Count: ${viewModel.revealedCount.intValue}"
+                BOARD_LOSE_STATE -> stringResource(id = R.string.board_lose)
+                BOARD_WIN_STATE -> stringResource(id = R.string.board_win)
+                else -> stringResource(id = R.string.board_count, viewModel.revealedCount.intValue)
             },
             Modifier
                 .background(
@@ -108,12 +110,12 @@ fun BottomLayout(
         ElevatedButton(onClick = {
             viewModel.resetBoard()
         }) {
-            Text(text = "RESET")
+            Text(text = stringResource(id = R.string.board_reset))
         }
         ElevatedButton(onClick = {
             viewModel.saveGame()
         }) {
-            Text(text = "SAVE")
+            Text(text = stringResource(id = R.string.board_save))
         }
     }
 }

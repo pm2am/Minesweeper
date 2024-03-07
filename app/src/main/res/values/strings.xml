@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Minesweeper</string>
+    <string name="date_string">Date</string>
+    <string name="win_string">Win</string>
+    <string name="loss_string">Lose</string>
+    <string name="score_list">Score List</string>
+    <string name="menu_resume">RESUME</string>
+    <string name="menu_board">BOARD</string>
+    <string name="menu_score">SCORE</string>
+    <string name="board_time">Time %d s</string>
+    <string name="board_count">Count %d</string>
+    <string name="board_reset">RESET</string>
+    <string name="board_save">SAVE</string>
+    <string name="board_lose">LOSE</string>
+    <string name="board_win">WIN</string>
 </resources>

@@ -8,8 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.findViewTreeViewModelStoreOwner
+import com.example.minesweeper.R
 import com.example.minesweeper.viewmodel.BoardViewModel
 
 @Composable
@@ -34,7 +36,7 @@ fun MainScreen(
             ElevatedButton(onClick = onBoardClicked,
             ) {
                 Text(
-                    text = "Resume",
+                    text = stringResource(id = R.string.menu_resume),
                 )
             }
         }
@@ -46,7 +48,7 @@ fun MainScreen(
             },
         ) {
             Text(
-                text = "Board",
+                text = stringResource(id = R.string.menu_board),
                 )
         }
 
@@ -56,7 +58,7 @@ fun MainScreen(
             }
         ) {
             Text(
-                text = "Score",
+                text = stringResource(id = R.string.menu_score),
             )
         }
     }
