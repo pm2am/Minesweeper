@@ -47,11 +47,6 @@ class BoardActivity : ComponentActivity() {
             }
         }
     }
-
-    override fun onStop() {
-        super.onStop()
-        viewModel.saveGame()
-    }
 }
 
 @Composable
