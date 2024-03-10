@@ -118,6 +118,7 @@ class BoardViewModel @Inject constructor(
                 } else if (revealedCount.intValue==BOARD_LOSE_STATE) {
                     scoreDao.updateLossCount(dateString)
                 }
+                gameDao.deleteRecord()
             }
         }
     }
